@@ -31,13 +31,24 @@ setInterval( async () => {
         const commands = JSON.parse(commandsJSON);
         const command = commands.find(c => c.name.toLowerCase() === msg.content.toLowerCase());
         if (command) {
-            const scriptPath = path.join(__dirname, 'scripts', `${command.name}.js`);
+            const scriptName = `${command.name}.js`;
+            const scriptPath = path.join(__dirname, 'scripts', scriptName);
             if (fs.existsSync(scriptPath)) {
                 const scriptText = fs.readFileSync(scriptPath);
                 const script = new vm.Script(scriptText);
+                command.context.require = require;
                 vm.createContext(command.context);
-                script.runInContext(command.context);
-                msg.reply(command.context.responseText || "you broke me");
+                try {
+                    command.context.callback = (responseText) => {
+                        msg.reply(responseText || command.context.responseText);
+                    };
+                    script.runInContext(command.context, {
+                        displayErrors: true
+                    });
+                    
+                } catch(err) {
+                    msg.reply(`Failed to run the ${scriptName} script. Error: "${err.message}", stack: "${err.stack}"`);
+                }
             } else {
                 msg.reply("you broke me");
             }
