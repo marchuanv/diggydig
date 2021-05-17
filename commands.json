@@ -1,0 +1,5 @@
+[
+    { "name": "status", "context": { "responseText": "failed to retrieve server status" } },
+    { "name": "start", "context": { "responseText": "failed to start server" } },
+    { "name": "stop", "context": { "responseText": "failed to stop server" } }
+]
