@@ -47,10 +47,10 @@ setInterval( async () => {
                     });
                     
                 } catch(err) {
-                    msg.reply(`Failed to run the ${scriptName} script. Error: "${err.message}", stack: "${err.stack}"`);
+                    msg.reply(`unable to run the ${command.name} command. Error: "${err.message}", Stack: "${err.stack}"`);
                 }
             } else {
-                msg.reply("you broke me");
+                msg.reply(`unable to run the ${command.name} command. ${scriptPath} does not exist.`);
             }
         } else {
             msg.reply("unrecognised command");
